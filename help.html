@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<title>大麦座位与票价统计 · 字段映射</title>
+<style>body{font:16px/1.65 system-ui,sans-serif;margin:2rem auto;max-width:720px;padding:0 1rem}pre{padding:1rem;background:#f4f1f3;overflow:auto}code{font-size:.93em}</style>
+<h1>字段映射与统计口径</h1>
+<p>解压扩展 ZIP。在 <code>chrome://extensions</code> 打开开发者模式，点「加载已解压的扩展程序」，选择包含 <code>manifest.json</code> 的文件夹。然后打开或刷新大麦选座页，点击工具栏中的扩展图标。</p>
+<p>如果缺少响应，在大麦页打开 Chrome 开发者工具后刷新。扩展会尝试从开发者工具的网络记录读取目标项。面板中可以逐项保存拿到的响应。</p>
+<h2>如何填写映射</h2>
+<p>下面是格式示例，路径、字段名和状态文字为示例数据。请从实际响应核对后修改。来源可用 <code>layout</code>、<code>dynamic</code>、<code>status</code>、<code>area</code>。路径从响应根对象开始。以 ID 为键的对象可使用 <code>$key</code> 作为 ID，以标量状态为值时使用 <code>$value</code>。</p>
+<pre>{
+  "layout": {
+    "path": "data.seats",
+    "id": "seatId",
+    "tier": "priceId"
+  },
+  "prices": {
+    "source": "dynamic",
+    "path": "data.tiers",
+    "id": "priceId",
+    "price": "facePrice",
+    "unit": "yuan"
+  },
+  "status": {
+    "path": "data.seatStatuses",
+    "id": "$key",
+    "value": "$value",
+    "codes": {
+      "OPEN": "available",
+      "RESERVED": "locked",
+      "SOLD": "sold"
+    }
+  },
+  "layoutComplete": false
+}</pre>
+<p>未指定单位的数字价格只有能与页面单张票档唯一对应时才纳入统计。已知响应价格以分为单位时，用 <code>"unit": "fen"</code>。布局记录直接提供票面价时，在 <code>layout</code> 中指定 <code>price</code> 和 <code>unit</code>。确认布局包含本场全部座位后，把 <code>layoutComplete</code> 设为 <code>true</code>。只有座位都有票面价时才显示全场均价。其他情况下显示已知价格样本的均价和覆盖量。</p>
+<p>支持状态 <code>available</code>、<code>sold</code>、<code>locked</code>、<code>selected</code>、<code>unavailable</code>。缺失、冲突或无法解释的状态显示为「未知」。如果接口使用增量更新或只列部分座位，缺席记录保持未知。</p>
+<h2>当前限制</h2>
+<p>扩展支持大麦当前的 gzip/Protobuf 布局、分区压缩座位状态和普通票面价格，以及通用 JSON、JSONP。上述大麦格式已在 2026-12-18 20:00 场次实测。当前大麦格式下，库存码 2 对应彩色可选座位，码 8 对应灰色座位，面板和 CSV 按统计口径计为已售。其他状态码保持未知。监听范围仅限列出的座位资源，数据留在本机。该扩展不发起选座、锁座或购票请求。</p>
+</html>

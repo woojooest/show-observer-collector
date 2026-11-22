@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<title>大麦座位与票价统计</title>
+<link rel="stylesheet" href="popup.css">
+<main>
+  <header><h1>座位与票价统计</h1><button id="refresh">刷新统计</button></header>
+  <p id="performance"></p>
+  <p id="message" role="status">正在读取当前选座页…</p>
+  <section id="statistics" hidden>
+    <div class="metrics">
+      <div><span id="average-label">已识别座位均价</span><strong id="average"></strong><small id="coverage"></small></div>
+      <div><span>可选座位均价</span><strong id="available-average"></strong><small id="available-coverage"></small></div>
+    </div>
+    <table>
+      <thead><tr><th scope="col">票面价</th><th scope="col">座位</th><th scope="col">可选</th><th scope="col">已售</th><th scope="col">未知</th></tr></thead>
+      <tbody id="tiers"></tbody>
+      <tfoot id="totals"></tfoot>
+    </table>
+    <button id="export">导出逐座 CSV</button>
+    <button id="mark-unknown" hidden>圈出未知票价区域</button>
+  </section>
+  <section>
+    <h2>数据来源</h2>
+    <ul id="sources"></ul>
+    <p id="capture-hint">安装后请刷新选座页。若响应未捕获，打开该页的 Chrome 开发者工具，再刷新一次。</p>
+  </section>
+  <section id="collector">
+    <h2>采集器</h2>
+    <p id="collector-status"></p>
+    <button id="open-console">打开采集控制台</button>
+  </section>
+  <details>
+    <summary>字段映射</summary>
+    <p>只有在核对原始响应后，才应填写数字状态码、价格单位和完整布局标记。<a href="help.html" target="_blank">查看映射示例</a></p>
+    <textarea id="profile" aria-label="字段映射 JSON" spellcheck="false" rows="7"></textarea>
+    <button id="save">应用映射</button>
+  </details>
+</main>
+<script src="popup.js"></script>
+<script src="collector-popup.js"></script>
+</html>

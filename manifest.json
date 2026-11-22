@@ -1,0 +1,66 @@
+{
+  "manifest_version": 3,
+  "minimum_chrome_version": "111",
+  "name": "演出观察采集器",
+  "version": "0.5.1",
+  "description": "在已登录的 Chrome 里按需读取关注剧目的场次排期和选座页库存：从演出观察系统同步待办，挑选执行或全部执行，结果上传或存在本地。也保留手动统计座位与票价的面板。",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/seat-16.png",
+      "24": "icons/seat-24.png",
+      "32": "icons/seat-32.png",
+      "48": "icons/seat-48.png"
+    }
+  },
+  "devtools_page": "devtools.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://m.damai.cn/shows/seat.html*"
+      ],
+      "run_at": "document_start",
+      "js": [
+        "layout.js",
+        "model.js",
+        "content.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://m.damai.cn/shows/seat.html*"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "js": [
+        "capture.js"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "icons/seat-16.png",
+    "32": "icons/seat-32.png",
+    "48": "icons/seat-48.png",
+    "128": "icons/seat-128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "alarms",
+    "tabs",
+    "storage",
+    "unlimitedStorage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://m.damai.cn/*",
+    "http://127.0.0.1/*",
+    "http://localhost/*"
+  ],
+  "options_page": "console.html",
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ]
+}
