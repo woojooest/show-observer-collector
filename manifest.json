@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "minimum_chrome_version": "111",
   "name": "演出观察采集器",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "在已登录的 Chrome 里按需读取关注剧目的场次排期和选座页库存：从演出观察系统同步待办，挑选执行或全部执行，结果上传或存在本地。也保留手动统计座位与票价的面板。",
   "action": {
     "default_popup": "popup.html",
